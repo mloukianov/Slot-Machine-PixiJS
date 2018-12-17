@@ -3,6 +3,11 @@
 
 Link https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/
 
+## Resources
+
+https://pixijs.io/examples/#/demos/slots-demo.js
+https://lebab.io/try-it
+
 ## The Test 
 
 To create a simple 3 reel slot machine using JavaScript ES5 or ES6 and the Pixi.js framework. 
