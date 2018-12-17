@@ -1,4 +1,7 @@
 # Core Gaming HTML5/JavaScript Games Developer - Tech Test 
+## Play Slot Machine Game
+
+Link https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/
 
 ## The Test 
 
