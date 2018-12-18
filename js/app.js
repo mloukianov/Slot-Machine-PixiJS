@@ -1,3 +1,18 @@
+/* TODO: 
+    - Textures:
+    - add button choose stake and show current stake - > name stake
+    - add showcase Total money  - > name balance
+    - add showcase total win - > name win
+    - add coin image
+    - add border to text/restyle
+    - Methods:
+    - Calculate total and left balance
+     - Calculate number of wins
+     - Win Logic
+     - Stake logic
+     - Add tweens pixi, tweens
+     - Add sound pixi.sound
+*/
 const app = new PIXI.Application(640, 360, {
     backgroundColor: 0x1099bb
 });
@@ -57,6 +72,14 @@ function onAssetsLoaded() {
         reels.push(reel);
     }
     app.stage.addChild(reelContainer);
+
+    /* TODO:
+        -change style of top and bottom canvas background
+        - draw the buttons
+        FIXME:
+        - fix the reel position
+        - responsive on all devices
+    */
 
     //Build top & bottom covers and position reelContainer
     const margin = (app.screen.height - SYMBOL_SIZE * 3) / 2;
