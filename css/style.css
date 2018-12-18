@@ -1,19 +1,24 @@
 body {
-    height: 100%;
-    width: 100%;
+    
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: #282828;
+    background: #fdfdfd;
 }
 
 canvas {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: center;
     margin: auto;
     max-width: 100%;
     max-height: 100%;
+}
+
+.container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+}
+.container h1{
+    align-items: center;
+    margin: auto;
 }
