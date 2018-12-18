@@ -22,8 +22,9 @@ PIXI.loader
     .add("blue", "./images/Gem Blue.png")
     .add("green", "./images/Gem Green.png")
     .add("orange", "./images/Gem Orange.png")
-    .add("buttonActive", "./images/BTN_Spin_active.png")
+    .add("buttonActive", "./images/spin.png")
     .add("buttonDeactivated", "./images/BTN_Spin_deactivated.png")
+    .add("coins", "./images/coin.png")
     .load(onAssetsLoaded);
 
 
@@ -39,6 +40,21 @@ function onAssetsLoaded() {
         PIXI.Texture.fromImage("./images/Gem Green.png"),
         PIXI.Texture.fromImage("./images/Gem Orange.png")
     ];
+
+    // build border
+    let graphics = new PIXI.Graphics();
+
+    // draw a rounded rectangle
+    graphics.lineStyle(2, 0xFF00FF, 1);
+    graphics.beginFill(0xFF00BB, 0.25);
+    graphics.drawRoundedRect((app.screen.width / 5), (app.screen.height / 4), 400, 200, 50);
+    graphics.endFill();
+
+    let coins = new PIXI.Sprite.fromImage("./images/coin.png");
+    coins.x = app.screen.width - 150;
+    coins.y = 2;
+    coins.scale.x *= 0.08;
+    coins.scale.y *= 0.08;
 
     //Build the reels
     const reels = [];
@@ -71,6 +87,7 @@ function onAssetsLoaded() {
         }
         reels.push(reel);
     }
+    app.stage.addChild(graphics);
     app.stage.addChild(reelContainer);
 
     /* TODO:
@@ -82,15 +99,15 @@ function onAssetsLoaded() {
     */
 
     //Build top & bottom covers and position reelContainer
-    const margin = (app.screen.height - SYMBOL_SIZE * 3) / 2;
-    reelContainer.y = margin;
-    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 3);
+    const margin = (app.screen.height - SYMBOL_SIZE * 2.5) / 2;
+    reelContainer.y = margin/3;
+    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 4);
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
     top.drawRect(0, 0, app.screen.width, margin);
     const bottom = new PIXI.Graphics();
     bottom.beginFill(0, 1);
-    bottom.drawRect(0, SYMBOL_SIZE * 3 + margin, app.screen.width, margin);
+    bottom.drawRect(0, SYMBOL_SIZE * 2.5 + margin, app.screen.width, margin);
 
     //Add play text
     const style = new PIXI.TextStyle({
@@ -116,19 +133,22 @@ function onAssetsLoaded() {
     bottom.addChild(playText);
 
     //Add header text
-    const headerText = new PIXI.Text('PIXI MONSTER SLOTS!', style);
+    const headerText = new PIXI.Text('Slot Machine Game', style);
     headerText.x = Math.round((top.width - headerText.width) / 2);
     headerText.y = Math.round((margin - headerText.height) / 2);
     top.addChild(headerText);
 
     //Spin button
-    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/BTN_Spin_active.png"));
-    buttonActive.x = 50;
-    buttonActive.y = 50;
+    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/spin.png"));
+    buttonActive.x = app.screen.width/2;
+    buttonActive.y = app.screen.height/2 + 90;
+    buttonActive.scale.x *= 0.2;
+    buttonActive.scale.y *= 0.2;
 
     app.stage.addChild(top);
     app.stage.addChild(bottom);
     app.stage.addChild(buttonActive);
+    app.stage.addChild(coins);
 
     //Set the interactivity.
     buttonActive.interactive = true;

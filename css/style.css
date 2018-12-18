@@ -16,7 +16,14 @@ canvas {
       flex-direction: row;
       align-items: flex-end;
 }
-.container h1{
-    align-items: center;
-    margin: auto;
+
+
+body {
+    background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/Y2S3rB2/big-spinning-diamond-background_vkx5ylxywx__F0000.png");
+    background-color: #cccccc;
+}
+
+canvas {
+    width: 80%;
+    margin: 0 auto;
 }
