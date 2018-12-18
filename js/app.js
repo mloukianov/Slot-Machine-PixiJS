@@ -1,4 +1,4 @@
-const app = new PIXI.Application(800, 600, {
+const app = new PIXI.Application(640, 360, {
     backgroundColor: 0x1099bb
 });
 document.body.appendChild(app.view);
@@ -7,15 +7,17 @@ PIXI.loader
     .add("blue", "./images/Gem Blue.png")
     .add("green", "./images/Gem Green.png")
     .add("orange", "./images/Gem Orange.png")
-    .add("buttonActive", "./BTN_Spin_active")
-    .add("buttonDeactivated", "./BTN_Spin_deactivated")
+    .add("buttonActive", "./images/BTN_Spin_active.png")
+    .add("buttonDeactivated", "./images/BTN_Spin_deactivated.png")
     .load(onAssetsLoaded);
 
-const REEL_WIDTH = 160;
-const SYMBOL_SIZE = 150;
+
+let REEL_WIDTH = 120;
+let SYMBOL_SIZE = 110;
 
 //onAssetsLoaded handler builds the example.
 function onAssetsLoaded() {
+
     //Create different slot symbols.
     const slotTextures = [
         PIXI.Texture.fromImage("./images/Gem Blue.png"),
@@ -26,7 +28,7 @@ function onAssetsLoaded() {
     //Build the reels
     const reels = [];
     const reelContainer = new PIXI.Container();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
         const rc = new PIXI.Container();
         rc.x = i * REEL_WIDTH;
         reelContainer.addChild(rc);
@@ -59,7 +61,7 @@ function onAssetsLoaded() {
     //Build top & bottom covers and position reelContainer
     const margin = (app.screen.height - SYMBOL_SIZE * 3) / 2;
     reelContainer.y = margin;
-    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 5);
+    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 3);
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
     top.drawRect(0, 0, app.screen.width, margin);
@@ -70,7 +72,7 @@ function onAssetsLoaded() {
     //Add play text
     const style = new PIXI.TextStyle({
         fontFamily: 'Arial',
-        fontSize: 36,
+        fontSize: 24,
         fontStyle: 'italic',
         fontWeight: 'bold',
         fill: ['#ffffff', '#00ff99'], // gradient
@@ -82,7 +84,7 @@ function onAssetsLoaded() {
         dropShadowAngle: Math.PI / 6,
         dropShadowDistance: 6,
         wordWrap: true,
-        wordWrapWidth: 440
+        wordWrapWidth: 300
     });
 
     const playText = new PIXI.Text('Spin the wheels!', style);
@@ -96,8 +98,22 @@ function onAssetsLoaded() {
     headerText.y = Math.round((margin - headerText.height) / 2);
     top.addChild(headerText);
 
+    //Spin button
+    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/BTN_Spin_active.png"));
+    buttonActive.x = 50;
+    buttonActive.y = 50;
+
     app.stage.addChild(top);
     app.stage.addChild(bottom);
+    app.stage.addChild(buttonActive);
+
+    //Set the interactivity.
+    buttonActive.interactive = true;
+    buttonActive.buttonMode = true;
+    buttonActive.addListener("pointerdown", () => {
+        startPlay();
+    });
+
 
     //Set the interactivity.
     bottom.interactive = true;
