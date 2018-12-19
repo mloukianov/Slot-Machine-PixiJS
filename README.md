@@ -6,7 +6,16 @@ Link https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/
 ## Resources
 
 https://pixijs.io/examples/#/demos/slots-demo.js
+
 https://lebab.io/try-it
+
+npm init
+
+http-server
+
+npm install fconsole
+
+https://chrome.google.com/webstore/detail/pixijs-devtools/aamddddknhcagpehecnhphigffljadon
 
 ## The Test 
 
@@ -31,10 +40,10 @@ As a hint have a look for 'Slot Machine' in the search engine of your choice. If
 
 * Make the canvas auto fit to the current window size, so the game works on all mobile devices and desktop machines. 
 * Have your game handle pixel ratio and load higher res graphics if required. 
-* Sounds 
+* Sounds
 
 **Artwork can be programmer art or anything you find around on the web.**
- 
+
 ## Review Criteria 
 
 We will be looking for: 
