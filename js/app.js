@@ -14,6 +14,16 @@
      - Add sound pixi.sound
 */
 
+class Resources {
+    constructor(balance, stake, win) {
+        this.balance = 500;
+        this.stake = 1;
+        this.win = 0;
+        this.playing = false;
+    }
+}
+let playerResources = new Resources;
+
 const app = new PIXI.Application(640, 360, {
     transparent: true,
     autoResize: true,
@@ -38,16 +48,27 @@ PIXI.loader
 let REEL_WIDTH = 90;
 let SYMBOL_SIZE = 80;
 let reels = [];
+let anotherSlot = [];
+let slotTextures = [];
+let anotherSlotTextures = [];
+let reelContainer;
+let reel;
+
+let blue = PIXI.Texture.fromImage("./images/Gem Blue.png");
+let green = PIXI.Texture.fromImage("./images/Gem Green.png");
+let orange = PIXI.Texture.fromImage("./images/Gem Orange.png");
 
 //onAssetsLoaded handler builds the example.
 function onAssetsLoaded() {
 
     //Create different slot symbols.
-    const slotTextures = [
-        PIXI.Texture.fromImage("./images/Gem Blue.png"),
-        PIXI.Texture.fromImage("./images/Gem Green.png"),
-        PIXI.Texture.fromImage("./images/Gem Orange.png")
+    slotTextures = [
+        blue,
+        green,
+        orange
     ];
+
+   
 
     //container for footer items
     const footerContainer = new PIXI.Container();
@@ -78,22 +99,34 @@ function onAssetsLoaded() {
     leftArrow.y = 296;
     leftArrow.scale.x *= 0.05;
     leftArrow.scale.y *= 0.05;
+    leftArrow.interactive = true;
+    leftArrow.buttonMode = true;
+    //check for event on spin button
+    leftArrow.addListener("pointerdown", () => {
+        console.log(`left arrow clicked`);
+    });
 
     let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
     rightArrow.x = 380; //255
     rightArrow.y = 296;
     rightArrow.scale.x *= 0.05;
     rightArrow.scale.y *= 0.05;
+    rightArrow.interactive = true;
+    rightArrow.buttonMode = true;
+    //check for event on spin button
+    rightArrow.addListener("pointerdown", () => {
+        console.log(`right arrow clicked`);
+    });
 
     //Build the reels
     
-    let reelContainer = new PIXI.Container();
+    reelContainer = new PIXI.Container();
     for (let i = 0; i < 3; i++) {
         const rc = new PIXI.Container();
         rc.x = i * REEL_WIDTH;
         reelContainer.addChild(rc);
         
-        const reel = {
+        reel = {
             container: rc,
             symbols: [],
             position: 0,
@@ -167,18 +200,23 @@ function onAssetsLoaded() {
     headerText.y = Math.round((margin - headerText.height) / 2);
     top.addChild(headerText);
 
-    //Spin button
+        //Spin button
     let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/spin.png"));
     buttonActive.x = 450;
     buttonActive.y = 235;
     buttonActive.scale.x *= 0.2;
     buttonActive.scale.y *= 0.2;
 
-    app.stage.addChild(top);
+    let textHolder = 0;
+    const stackText = new PIXI.Text(`${playerResources.stake}`, style);
+    stackText.x = (app.screen.width / 2 - 10);
+    stackText.y = 295;
+    footerContainer.addChild(stackText);
 
+    app.stage.addChild(top);
     app.stage.addChild(coins);
     app.stage.addChild(footerContainer);
-    footerContainer.addChild(bottom, graphicsOne, graphicsTwo, leftArrow, rightArrow, buttonActive);
+    footerContainer.addChild(bottom, graphicsOne, graphicsTwo, leftArrow, rightArrow, buttonActive, stackText);
     footerContainer.x = 0;
     footerContainer.y = 20;
 
@@ -230,7 +268,6 @@ function onAssetsLoaded() {
             for (let j = 0; j < r.symbols.length; j++) {
                 const s = r.symbols[j];
                 const prevy = s.y;
-                const symbolIndex = 
                 s.y = (r.position + j) % r.symbols.length * SYMBOL_SIZE - SYMBOL_SIZE;
                 if (s.y < 0 && prevy > SYMBOL_SIZE) {
                     //Detect going over and swap a texture. 
@@ -294,14 +331,6 @@ function lerp(a1, a2, t) {
 //https://github.com/CreateJS/TweenJS/blob/master/src/tweenjs/Ease.js
 backout = amount => t => --t * t * ((amount + 1) * t + amount) + 1;
 
-class Resources {
-    constructor(balance, stake, win) {
-        this.balance = 500;
-        this.stake = 1;
-        this.win = 0;
-        this.playing = false;
-    }
-}
-let playerResources = new Resources;
 
-//check for event on spin button
+
+
