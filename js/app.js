@@ -14,15 +14,6 @@
      - Add sound pixi.sound
 */
 
-class Resources {
-    constructor(balance, stake, win) {
-        this.balance = 500;
-        this.stake = 1;
-        this.win = 0;
-        this.playing = false;
-    }
-}
-let playerResources = new Resources;
 
 const app = new PIXI.Application(640, 360, {
     transparent: true,
@@ -31,6 +22,26 @@ const app = new PIXI.Application(640, 360, {
 });
 
 document.querySelector("#game-canvas").appendChild(app.view);
+
+class Resources {
+    constructor(balance, stake, win) {
+        this.balance = 500;
+        this.stake = 1;
+        this.win = 0;
+        this.playing = false;
+        this.addStake = function addStake() {
+            if (playerResources.stake >= 0 && playerResources.stake <= 20) {
+                playerResources.stake = playerResources.stake + 1;
+            }
+        };
+        this.minusStake = function minusStake() {
+            if (playerResources.stake >= 0 && playerResources.stake <= 20) {
+                playerResources.stake = playerResources.stake - 1;
+            }
+        };
+    }
+}
+let playerResources = new Resources();
 
 PIXI.loader
     .add("blue", "./images/Gem Blue.png")
@@ -68,7 +79,7 @@ function onAssetsLoaded() {
         orange
     ];
 
-   
+
 
     //container for footer items
     const footerContainer = new PIXI.Container();
@@ -101,10 +112,6 @@ function onAssetsLoaded() {
     leftArrow.scale.y *= 0.05;
     leftArrow.interactive = true;
     leftArrow.buttonMode = true;
-    //check for event on spin button
-    leftArrow.addListener("pointerdown", () => {
-        console.log(`left arrow clicked`);
-    });
 
     let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
     rightArrow.x = 380; //255
@@ -113,19 +120,15 @@ function onAssetsLoaded() {
     rightArrow.scale.y *= 0.05;
     rightArrow.interactive = true;
     rightArrow.buttonMode = true;
-    //check for event on spin button
-    rightArrow.addListener("pointerdown", () => {
-        console.log(`right arrow clicked`);
-    });
 
     //Build the reels
-    
+
     reelContainer = new PIXI.Container();
     for (let i = 0; i < 3; i++) {
         const rc = new PIXI.Container();
         rc.x = i * REEL_WIDTH;
         reelContainer.addChild(rc);
-        
+
         reel = {
             container: rc,
             symbols: [],
@@ -162,7 +165,7 @@ function onAssetsLoaded() {
 
     //Build top & bottom covers and position reelContainer
     const margin = 50;
-    reelContainer.y = margin*2.8;
+    reelContainer.y = margin * 2.8;
     reelContainer.x = 200;
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
@@ -200,18 +203,31 @@ function onAssetsLoaded() {
     headerText.y = Math.round((margin - headerText.height) / 2);
     top.addChild(headerText);
 
-        //Spin button
+    //Spin button
     let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/spin.png"));
     buttonActive.x = 450;
     buttonActive.y = 235;
     buttonActive.scale.x *= 0.2;
     buttonActive.scale.y *= 0.2;
 
-    let textHolder = 0;
-    const stackText = new PIXI.Text(`${playerResources.stake}`, style);
+    //StackText
+
+    let stackText = new PIXI.Text(`${playerResources.stake}`, style);
     stackText.x = (app.screen.width / 2 - 10);
     stackText.y = 295;
-    footerContainer.addChild(stackText);
+
+    //check for event on click on rightArrow button and call AddStake function
+    rightArrow.addListener("pointerdown", () => {
+        console.log(`right arrow clicked`);
+        playerResources.addStake();
+    });
+
+    //check for event on click on leftArrow button and call MinusStake function
+    leftArrow.addListener("pointerdown", () => {
+        console.log(`left arrow clicked`);
+        playerResources.minusStake();
+        footerContainer.addChild(stackText);
+    });
 
     app.stage.addChild(top);
     app.stage.addChild(coins);
@@ -249,11 +265,11 @@ function onAssetsLoaded() {
     }
 
     //function to get symbols index/position
-/*     Response balance = "98.80" stake = "1.20" win = "0.00" >
-        <SymbolGrid column_id="0" symbols="2,2,1" />
-        <SymbolGrid column_id="1" symbols="1,2,1" />
-        <SymbolGrid column_id="2" symbols="1,0,1" />
-</Response > */
+    /*     Response balance = "98.80" stake = "1.20" win = "0.00" >
+            <SymbolGrid column_id="0" symbols="2,2,1" />
+            <SymbolGrid column_id="1" symbols="1,2,1" />
+            <SymbolGrid column_id="2" symbols="1,0,1" />
+    </Response > */
 
     // Listen for animate update.
     app.ticker.add(delta => {
@@ -330,7 +346,3 @@ function lerp(a1, a2, t) {
 //Backout function from tweenjs.
 //https://github.com/CreateJS/TweenJS/blob/master/src/tweenjs/Ease.js
 backout = amount => t => --t * t * ((amount + 1) * t + amount) + 1;
-
-
-
-
