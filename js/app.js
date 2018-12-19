@@ -13,11 +13,14 @@
      - Add tweens pixi, tweens
      - Add sound pixi.sound
 */
+
 const app = new PIXI.Application(640, 360, {
-    transparent: true
+    transparent: true,
+    autoResize: true,
+    resolution: devicePixelRatio
 });
 
-document.body.appendChild(app.view);
+document.querySelector("#game-canvas").appendChild(app.view);
 
 PIXI.loader
     .add("blue", "./images/Gem Blue.png")
