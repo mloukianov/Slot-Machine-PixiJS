@@ -37,6 +37,7 @@ PIXI.loader
 
 let REEL_WIDTH = 90;
 let SYMBOL_SIZE = 80;
+let reels = [];
 
 //onAssetsLoaded handler builds the example.
 function onAssetsLoaded() {
@@ -47,6 +48,9 @@ function onAssetsLoaded() {
         PIXI.Texture.fromImage("./images/Gem Green.png"),
         PIXI.Texture.fromImage("./images/Gem Orange.png")
     ];
+
+    //container for footer items
+    const footerContainer = new PIXI.Container();
 
     // draw a rounded rectangle
     let graphicsOne = new PIXI.Graphics();
@@ -82,13 +86,13 @@ function onAssetsLoaded() {
     rightArrow.scale.y *= 0.05;
 
     //Build the reels
-    const reels = [];
-    const reelContainer = new PIXI.Container();
+    
+    let reelContainer = new PIXI.Container();
     for (let i = 0; i < 3; i++) {
         const rc = new PIXI.Container();
         rc.x = i * REEL_WIDTH;
         reelContainer.addChild(rc);
-
+        
         const reel = {
             container: rc,
             symbols: [],
@@ -96,12 +100,13 @@ function onAssetsLoaded() {
             previousPosition: 0,
             blur: new PIXI.filters.BlurFilter()
         };
+        //let newposition = reel.reelContainer.getChildIndex;
         reel.blur.blurX = 0;
         reel.blur.blurY = 0;
         rc.filters = [reel.blur];
 
         //Build the symbols
-        for (let j = 0; j < 4; j++) {
+        for (let j = 0; j < 3; j++) {
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
             //Scale the symbol to fit symbol area.
             symbol.y = j * SYMBOL_SIZE;
@@ -124,8 +129,8 @@ function onAssetsLoaded() {
 
     //Build top & bottom covers and position reelContainer
     const margin = 50;
-    reelContainer.y = margin;
-    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 5);
+    reelContainer.y = margin*2.8;
+    reelContainer.x = 200;
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
     top.drawRect(0, 0, app.screen.width, margin);
@@ -170,27 +175,20 @@ function onAssetsLoaded() {
     buttonActive.scale.y *= 0.2;
 
     app.stage.addChild(top);
-    app.stage.addChild(bottom);
-    app.stage.addChild(buttonActive);
+
     app.stage.addChild(coins);
-    app.stage.addChild(graphicsOne);
-    app.stage.addChild(graphicsTwo);
-    app.stage.addChild(leftArrow);
-    app.stage.addChild(rightArrow);
+    app.stage.addChild(footerContainer);
+    footerContainer.addChild(bottom, graphicsOne, graphicsTwo, leftArrow, rightArrow, buttonActive);
+    footerContainer.x = 0;
+    footerContainer.y = 20;
 
     //Set the interactivity.
     buttonActive.interactive = true;
     buttonActive.buttonMode = true;
+    //check for event on spin button
     buttonActive.addListener("pointerdown", () => {
         startPlay();
-    });
-
-
-    //Set the interactivity.
-    bottom.interactive = true;
-    bottom.buttonMode = true;
-    bottom.addListener("pointerdown", () => {
-        startPlay();
+        console.log(`button clicked`);
     });
 
     let running = false;
@@ -212,6 +210,13 @@ function onAssetsLoaded() {
         running = false;
     }
 
+    //function to get symbols index/position
+/*     Response balance = "98.80" stake = "1.20" win = "0.00" >
+        <SymbolGrid column_id="0" symbols="2,2,1" />
+        <SymbolGrid column_id="1" symbols="1,2,1" />
+        <SymbolGrid column_id="2" symbols="1,0,1" />
+</Response > */
+
     // Listen for animate update.
     app.ticker.add(delta => {
         //Update the slots.
@@ -225,6 +230,7 @@ function onAssetsLoaded() {
             for (let j = 0; j < r.symbols.length; j++) {
                 const s = r.symbols[j];
                 const prevy = s.y;
+                const symbolIndex = 
                 s.y = (r.position + j) % r.symbols.length * SYMBOL_SIZE - SYMBOL_SIZE;
                 if (s.y < 0 && prevy > SYMBOL_SIZE) {
                     //Detect going over and swap a texture. 
@@ -287,3 +293,15 @@ function lerp(a1, a2, t) {
 //Backout function from tweenjs.
 //https://github.com/CreateJS/TweenJS/blob/master/src/tweenjs/Ease.js
 backout = amount => t => --t * t * ((amount + 1) * t + amount) + 1;
+
+class Resources {
+    constructor(balance, stake, win) {
+        this.balance = 500;
+        this.stake = 1;
+        this.win = 0;
+        this.playing = false;
+    }
+}
+let playerResources = new Resources;
+
+//check for event on spin button
