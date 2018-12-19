@@ -25,6 +25,8 @@ PIXI.loader
     .add("buttonActive", "./images/spin.png")
     .add("buttonDeactivated", "./images/BTN_Spin_deactivated.png")
     .add("coins", "./images/coin.png")
+    .add("yellowBar", "./images/yellowButton.png") 
+    .add("blueBar", "./images/blueButton.png")
     .load(onAssetsLoaded);
 
 
@@ -55,6 +57,18 @@ function onAssetsLoaded() {
     coins.y = 2;
     coins.scale.x *= 0.08;
     coins.scale.y *= 0.08;
+
+    let yellowBar = new PIXI.Sprite.fromImage("./images/yellowButton.png");
+    yellowBar.x = 50;
+    yellowBar.y = 220;
+    yellowBar.scale.x *= 0.4;
+    yellowBar.scale.y *= 0.4;
+
+    let blueBar = new PIXI.Sprite.fromImage("./images/blueButton.png");
+    blueBar.x = 400;
+    blueBar.y = 200;
+    blueBar.scale.x *= 0.4;
+    blueBar.scale.y *= 0.4;
 
     //Build the reels
     const reels = [];
@@ -149,6 +163,8 @@ function onAssetsLoaded() {
     app.stage.addChild(bottom);
     app.stage.addChild(buttonActive);
     app.stage.addChild(coins);
+    app.stage.addChild(yellowBar);
+    app.stage.addChild(blueBar);
 
     //Set the interactivity.
     buttonActive.interactive = true;
