@@ -14,8 +14,9 @@
      - Add sound pixi.sound
 */
 const app = new PIXI.Application(640, 360, {
-    backgroundColor: 0x1099bb
+    transparent: true
 });
+
 document.body.appendChild(app.view);
 
 PIXI.loader
@@ -25,13 +26,14 @@ PIXI.loader
     .add("buttonActive", "./images/spin.png")
     .add("buttonDeactivated", "./images/BTN_Spin_deactivated.png")
     .add("coins", "./images/coin.png")
-    .add("yellowBar", "./images/yellowButton.png") 
-    .add("blueBar", "./images/blueButton.png")
+    .add("yellowBar", "./images/leftArrow.png")
+    .add("blueBar", "./images/rightArrow.png")
+    .add("background", "./images/background.png")
     .load(onAssetsLoaded);
 
 
-let REEL_WIDTH = 120;
-let SYMBOL_SIZE = 110;
+let REEL_WIDTH = 90;
+let SYMBOL_SIZE = 80;
 
 //onAssetsLoaded handler builds the example.
 function onAssetsLoaded() {
@@ -43,14 +45,20 @@ function onAssetsLoaded() {
         PIXI.Texture.fromImage("./images/Gem Orange.png")
     ];
 
-    // build border
-    let graphics = new PIXI.Graphics();
+    // draw a rounded rectangle
+    let graphicsOne = new PIXI.Graphics();
+    graphicsOne.lineStyle(2, 0xFF00FF, 1);
+    graphicsOne.beginFill(0xFF00BB, 0.25);
+    graphicsOne.drawRoundedRect(50, 296, 120, 35, 15);
+    graphicsOne.endFill();
 
     // draw a rounded rectangle
-    graphics.lineStyle(2, 0xFF00FF, 1);
-    graphics.beginFill(0xFF00BB, 0.25);
-    graphics.drawRoundedRect((app.screen.width / 5), (app.screen.height / 4), 400, 200, 50);
-    graphics.endFill();
+    let graphicsTwo = new PIXI.Graphics();
+    graphicsTwo.lineStyle(2, 0xFF00FF, 1);
+    graphicsTwo.beginFill(0xFF00BB, 0.25);
+    graphicsTwo.drawRoundedRect(255, 296, 120, 35, 15);
+    graphicsTwo.endFill();
+
 
     let coins = new PIXI.Sprite.fromImage("./images/coin.png");
     coins.x = app.screen.width - 150;
@@ -58,17 +66,17 @@ function onAssetsLoaded() {
     coins.scale.x *= 0.08;
     coins.scale.y *= 0.08;
 
-    let yellowBar = new PIXI.Sprite.fromImage("./images/yellowButton.png");
-    yellowBar.x = 50;
-    yellowBar.y = 220;
-    yellowBar.scale.x *= 0.4;
-    yellowBar.scale.y *= 0.4;
+    let leftArrow = new PIXI.Sprite.fromImage("./images/leftArrow.png");
+    leftArrow.x = 220; //40
+    leftArrow.y = 296;
+    leftArrow.scale.x *= 0.05;
+    leftArrow.scale.y *= 0.05;
 
-    let blueBar = new PIXI.Sprite.fromImage("./images/blueButton.png");
-    blueBar.x = 400;
-    blueBar.y = 200;
-    blueBar.scale.x *= 0.4;
-    blueBar.scale.y *= 0.4;
+    let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
+    rightArrow.x = 380; //255
+    rightArrow.y = 296;
+    rightArrow.scale.x *= 0.05;
+    rightArrow.scale.y *= 0.05;
 
     //Build the reels
     const reels = [];
@@ -95,13 +103,12 @@ function onAssetsLoaded() {
             //Scale the symbol to fit symbol area.
             symbol.y = j * SYMBOL_SIZE;
             symbol.scale.x = symbol.scale.y = Math.min(SYMBOL_SIZE / symbol.width, SYMBOL_SIZE / symbol.height);
-            symbol.x = Math.round((SYMBOL_SIZE - symbol.width) / 2);
+            symbol.x = Math.round((SYMBOL_SIZE - symbol.width) / 9);
             reel.symbols.push(symbol);
             rc.addChild(symbol);
         }
         reels.push(reel);
     }
-    app.stage.addChild(graphics);
     app.stage.addChild(reelContainer);
 
     /* TODO:
@@ -113,15 +120,15 @@ function onAssetsLoaded() {
     */
 
     //Build top & bottom covers and position reelContainer
-    const margin = (app.screen.height - SYMBOL_SIZE * 2.5) / 2;
-    reelContainer.y = margin/3;
-    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 4);
+    const margin = 50;
+    reelContainer.y = margin;
+    reelContainer.x = Math.round(app.screen.width - REEL_WIDTH * 5);
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
     top.drawRect(0, 0, app.screen.width, margin);
     const bottom = new PIXI.Graphics();
     bottom.beginFill(0, 1);
-    bottom.drawRect(0, SYMBOL_SIZE * 2.5 + margin, app.screen.width, margin);
+    bottom.drawRect(0, 240 + margin, app.screen.width, margin);
 
     //Add play text
     const style = new PIXI.TextStyle({
@@ -141,11 +148,11 @@ function onAssetsLoaded() {
         wordWrapWidth: 300
     });
 
-    const playText = new PIXI.Text('Spin the wheels!', style);
+    /* const playText = new PIXI.Text('Spin the wheels!', style);
     playText.x = Math.round((bottom.width - playText.width) / 2);
     playText.y = app.screen.height - margin + Math.round((margin - playText.height) / 2);
     bottom.addChild(playText);
-
+ */
     //Add header text
     const headerText = new PIXI.Text('Slot Machine Game', style);
     headerText.x = Math.round((top.width - headerText.width) / 2);
@@ -154,8 +161,8 @@ function onAssetsLoaded() {
 
     //Spin button
     let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/spin.png"));
-    buttonActive.x = app.screen.width/2;
-    buttonActive.y = app.screen.height/2 + 90;
+    buttonActive.x = 450;
+    buttonActive.y = 235;
     buttonActive.scale.x *= 0.2;
     buttonActive.scale.y *= 0.2;
 
@@ -163,8 +170,10 @@ function onAssetsLoaded() {
     app.stage.addChild(bottom);
     app.stage.addChild(buttonActive);
     app.stage.addChild(coins);
-    app.stage.addChild(yellowBar);
-    app.stage.addChild(blueBar);
+    app.stage.addChild(graphicsOne);
+    app.stage.addChild(graphicsTwo);
+    app.stage.addChild(leftArrow);
+    app.stage.addChild(rightArrow);
 
     //Set the interactivity.
     buttonActive.interactive = true;
