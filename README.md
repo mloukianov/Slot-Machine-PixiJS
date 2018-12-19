@@ -5,6 +5,8 @@ Link https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/
 
 ## Resources
 
+http://pixijs.download/dev/docs/PIXI.html
+
 https://pixijs.io/examples/#/demos/slots-demo.js
 
 https://lebab.io/try-it
@@ -16,6 +18,8 @@ http-server
 npm install fconsole
 
 https://chrome.google.com/webstore/detail/pixijs-devtools/aamddddknhcagpehecnhphigffljadon
+
+https://pixijs.io/pixi-text-style/
 
 ## The Test 
 
