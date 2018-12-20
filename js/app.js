@@ -36,7 +36,7 @@ class Resources {
         };
         this.minusStake = function minusStake() {
             if (playerResources.stake >= 0 && playerResources.stake <= 20) {
-                playerResources.stake = playerResources.stake - 1;
+                playerResources.stake --;
             }
         };
     }
@@ -56,8 +56,8 @@ PIXI.loader
     .load(onAssetsLoaded);
 
 
-let REEL_WIDTH = 90;
-let SYMBOL_SIZE = 80;
+const REEL_WIDTH = 90;
+const SYMBOL_SIZE = 80;
 let reels = [];
 let anotherSlot = [];
 let slotTextures = [];
@@ -79,8 +79,6 @@ function onAssetsLoaded() {
         orange
     ];
 
-
-
     //container for footer items
     const footerContainer = new PIXI.Container();
 
@@ -98,13 +96,14 @@ function onAssetsLoaded() {
     graphicsTwo.drawRoundedRect(255, 296, 120, 35, 15);
     graphicsTwo.endFill();
 
-
+    //draw coin image for total balance
     let coins = new PIXI.Sprite.fromImage("./images/coin.png");
     coins.x = app.screen.width - 150;
     coins.y = 2;
     coins.scale.x *= 0.08;
     coins.scale.y *= 0.08;
 
+    // draw left arrow for stake selector
     let leftArrow = new PIXI.Sprite.fromImage("./images/leftArrow.png");
     leftArrow.x = 220; //40
     leftArrow.y = 296;
@@ -113,6 +112,7 @@ function onAssetsLoaded() {
     leftArrow.interactive = true;
     leftArrow.buttonMode = true;
 
+    // draw right Arrow button for stake selector
     let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
     rightArrow.x = 380; //255
     rightArrow.y = 296;
@@ -122,7 +122,6 @@ function onAssetsLoaded() {
     rightArrow.buttonMode = true;
 
     //Build the reels
-
     reelContainer = new PIXI.Container();
     for (let i = 0; i < 3; i++) {
         const rc = new PIXI.Container();
@@ -136,6 +135,7 @@ function onAssetsLoaded() {
             previousPosition: 0,
             blur: new PIXI.filters.BlurFilter()
         };
+
         //let newposition = reel.reelContainer.getChildIndex;
         reel.blur.blurX = 0;
         reel.blur.blurY = 0;
@@ -157,9 +157,7 @@ function onAssetsLoaded() {
 
     /* TODO:
         -change style of top and bottom canvas background
-        - draw the buttons
         FIXME:
-        - fix the reel position
         - responsive on all devices
     */
 
@@ -174,7 +172,7 @@ function onAssetsLoaded() {
     bottom.beginFill(0, 1);
     bottom.drawRect(0, 240 + margin, app.screen.width, margin);
 
-    //Add play text
+    //Add text Style properties
     const style = new PIXI.TextStyle({
         fontFamily: 'Arial',
         fontSize: 24,
@@ -192,11 +190,6 @@ function onAssetsLoaded() {
         wordWrapWidth: 300
     });
 
-    /* const playText = new PIXI.Text('Spin the wheels!', style);
-    playText.x = Math.round((bottom.width - playText.width) / 2);
-    playText.y = app.screen.height - margin + Math.round((margin - playText.height) / 2);
-    bottom.addChild(playText);
- */
     //Add header text
     const headerText = new PIXI.Text('Slot Machine Game', style);
     headerText.x = Math.round((top.width - headerText.width) / 2);
@@ -209,33 +202,6 @@ function onAssetsLoaded() {
     buttonActive.y = 235;
     buttonActive.scale.x *= 0.2;
     buttonActive.scale.y *= 0.2;
-
-    //StackText
-
-    let stackText = new PIXI.Text(`${playerResources.stake}`, style);
-    stackText.x = (app.screen.width / 2 - 10);
-    stackText.y = 295;
-
-    //check for event on click on rightArrow button and call AddStake function
-    rightArrow.addListener("pointerdown", () => {
-        console.log(`right arrow clicked`);
-        playerResources.addStake();
-    });
-
-    //check for event on click on leftArrow button and call MinusStake function
-    leftArrow.addListener("pointerdown", () => {
-        console.log(`left arrow clicked`);
-        playerResources.minusStake();
-        footerContainer.addChild(stackText);
-    });
-
-    app.stage.addChild(top);
-    app.stage.addChild(coins);
-    app.stage.addChild(footerContainer);
-    footerContainer.addChild(bottom, graphicsOne, graphicsTwo, leftArrow, rightArrow, buttonActive, stackText);
-    footerContainer.x = 0;
-    footerContainer.y = 20;
-
     //Set the interactivity.
     buttonActive.interactive = true;
     buttonActive.buttonMode = true;
@@ -244,6 +210,52 @@ function onAssetsLoaded() {
         startPlay();
         console.log(`button clicked`);
     });
+
+    //Stack Selector Text between arrow buttons
+    let stackText = new PIXI.Text(`${playerResources.stake}`, style);
+    stackText.x = (app.screen.width / 2 - 10);
+    stackText.y = 295;
+    footerContainer.addChild(stackText);
+
+    //Add win text to the canvas
+    let winText = new PIXI.Text(`${playerResources.win}`, style);
+    winText.x = 100;
+    winText.y = 295;
+    footerContainer.addChild(winText);
+
+    //Add balance text to the canvas
+    let balanceText = new PIXI.Text(`${playerResources.balance}`, style);
+    balanceText.x = 535;
+    balanceText.y = 7;
+    top.addChild(balanceText);
+
+    //check for event on click on rightArrow button and call AddStake function
+    rightArrow.addListener("pointerdown", () => {
+        console.log(`right arrow clicked ${playerResources.stake}`);
+        playerResources.addStake();
+        // FIXME: Bug the text is not changing when the value of stake is changing, counting is not correct when switching buttons
+    });
+
+    //check for event on click on leftArrow button and call MinusStake function
+    leftArrow.addListener("pointerdown", () => {
+        console.log(`left arrow clicked ${playerResources.stake}`);
+        playerResources.minusStake();
+        footerContainer.addChild(stackText);
+    });
+
+    app.stage.addChild(top);
+    app.stage.addChild(coins);
+    app.stage.addChild(footerContainer);
+    footerContainer.addChild(
+        bottom,
+        graphicsOne,
+        graphicsTwo,
+        leftArrow, rightArrow,
+        buttonActive,
+        stackText,
+        winText);
+    footerContainer.x = 0;
+    footerContainer.y = 20;
 
     let running = false;
 
