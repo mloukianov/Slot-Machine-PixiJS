@@ -1,21 +1,27 @@
 # Core Gaming HTML5/JavaScript Games Developer - Tech Test 
 ## Play Slot Machine Game
 
-Link https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/
+Link to the LIVE Demo :point_right: https://anastasiaseraciov.github.io/Slot-Machine-PixiJS/ :point_left:
+
+## Technologies
+
+HTML5 canvas, Jvascript/ES6 (Object Oriented Programming, template literals, arrow functions, local functions), CSS
+Pixi.JS - First Time!
+
+Visual Studio Code, Chrome PIXI.JS extension
+
+##Dependencies
+
+Because the project has a page on github it can be open for view straight away
+If you are opening from a local machine you need to create a local server ffrom command line for example:
+npm init
+http-server
 
 ## Resources
 
 http://pixijs.download/dev/docs/PIXI.html
 
 https://pixijs.io/examples/#/demos/slots-demo.js
-
-https://lebab.io/try-it
-
-npm init
-
-http-server
-
-npm install fconsole
 
 https://chrome.google.com/webstore/detail/pixijs-devtools/aamddddknhcagpehecnhphigffljadon
 
