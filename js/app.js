@@ -123,8 +123,8 @@ function onAssetsLoaded() {
 
     const buttonsHolder = new PIXI.Container();
     buttonsHolder.x = 0;
-    buttonsHolder.y = 286;
-    const makeImageButton = (image, audioMP3, audioOGG, x = 0, y = 0, scale) => {
+    buttonsHolder.y = 0;
+    const makeImageButton = (image, audioMP3, audioOGG, x, y, scale) => {
         const button = PIXI.Sprite.fromImage(image);
         const sound = new Howl({
             src: [audioMP3, audioOGG]
@@ -145,7 +145,7 @@ function onAssetsLoaded() {
         './assets/sounds/mp3/multimedia_button_click_006.mp3',
         './assets/sounds/ogg/multimedia_button_click_006.mp3',
         220,
-        10,
+        296,
         0.05
     );
 
@@ -154,8 +154,17 @@ function onAssetsLoaded() {
         './assets/sounds/mp3/multimedia_button_click_006.mp3',
         './assets/sounds/ogg/multimedia_button_click_006.mp3',
         380,
-        10,
+        296,
         0.05
+    );
+
+    const buttonActive = makeImageButton(
+        './assets/images/spin.png',
+        './assets/sounds/mp3/zapsplat_foley_money_pouch_fabric_coins_down_on_surface_006_15052.mp3',
+        './assets/sounds/ogg/zapsplat_foley_money_pouch_fabric_coins_down_on_surface_006_15052.mp3',
+        450,
+        235,
+        0.2
     );
 
         //check for event on click on rightArrow button and call AddStake function
@@ -170,6 +179,21 @@ function onAssetsLoaded() {
             console.log(`left arrow clicked ${playerResources.stake}`);
             playerResources.minusStake();
             footerContainer.addChild(stackText);
+        });
+
+        /* //Spin button
+        let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./assets/images/spin.png"));
+        buttonActive.x = 450;
+        buttonActive.y = 235;
+        buttonActive.scale.x *= 0.2;
+        buttonActive.scale.y *= 0.2;
+        //Set the interactivity.
+        buttonActive.interactive = true;
+        buttonActive.buttonMode = true; */
+        //check for event on spin button
+        buttonActive.addListener('pointerdown', () => {
+            startPlay();
+            console.log(`button clicked`);
         });
 
     //Build the reels
@@ -246,21 +270,6 @@ function onAssetsLoaded() {
     headerText.x = Math.round((top.width - headerText.width) / 2);
     headerText.y = Math.round((margin - headerText.height) / 2);
     top.addChild(headerText);
-
-    //Spin button
-    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./assets/images/spin.png"));
-    buttonActive.x = 450;
-    buttonActive.y = 235;
-    buttonActive.scale.x *= 0.2;
-    buttonActive.scale.y *= 0.2;
-    //Set the interactivity.
-    buttonActive.interactive = true;
-    buttonActive.buttonMode = true;
-    //check for event on spin button
-    buttonActive.addListener('pointerdown', () => {
-        startPlay();
-        console.log(`button clicked`);
-    });
 
     //Stack Selector Text between arrow buttons
     let stackText = new PIXI.Text(`${playerResources.stake}`, style);
