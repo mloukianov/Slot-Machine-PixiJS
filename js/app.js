@@ -14,14 +14,14 @@
      - Add sound pixi.sound
 */
 
-
 const app = new PIXI.Application(640, 360, {
     transparent: true,
     autoResize: true,
-    resolution: devicePixelRatio
+    antialias: true,
+    resolution: 1
 });
 
-document.querySelector("#game-canvas").appendChild(app.view);
+document.body.appendChild(app.view);
 
 class Resources {
     constructor(balance, stake, win) {
@@ -44,15 +44,15 @@ class Resources {
 let playerResources = new Resources();
 
 PIXI.loader
-    .add("blue", "./images/Gem Blue.png")
-    .add("green", "./images/Gem Green.png")
-    .add("orange", "./images/Gem Orange.png")
-    .add("buttonActive", "./images/spin.png")
-    .add("buttonDeactivated", "./images/BTN_Spin_deactivated.png")
-    .add("coins", "./images/coin.png")
-    .add("yellowBar", "./images/leftArrow.png")
-    .add("blueBar", "./images/rightArrow.png")
-    .add("background", "./images/background.png")
+    .add("blue", "./assets/images/Gem Blue.png")
+    .add("green", "./assets/images/Gem Green.png")
+    .add("orange", "./assets/images/Gem Orange.png")
+    .add("buttonActive", "./assets/images/spin.png")
+    .add("buttonDeactivated", "./assets/images/BTN_Spin_deactivated.png")
+    .add("coins", "./assets/images/coin.png")
+    .add("yellowBar", "./assets/images/leftArrow.png")
+    .add("blueBar", "./assets/images/rightArrow.png")
+    .add("background", "./assets/images/background.png")
     .load(onAssetsLoaded);
 
 
@@ -65,9 +65,9 @@ let anotherSlotTextures = [];
 let reelContainer;
 let reel;
 
-let blue = PIXI.Texture.fromImage("./images/Gem Blue.png");
-let green = PIXI.Texture.fromImage("./images/Gem Green.png");
-let orange = PIXI.Texture.fromImage("./images/Gem Orange.png");
+let blue = PIXI.Texture.fromImage("./assets/images/Gem Blue.png");
+let green = PIXI.Texture.fromImage("./assets/images/Gem Green.png");
+let orange = PIXI.Texture.fromImage("./assets/images/Gem Orange.png");
 
 //onAssetsLoaded handler builds the example.
 function onAssetsLoaded() {
@@ -97,29 +97,80 @@ function onAssetsLoaded() {
     graphicsTwo.endFill();
 
     //draw coin image for total balance
-    let coins = new PIXI.Sprite.fromImage("./images/coin.png");
+    let coins = new PIXI.Sprite.fromImage("./assets/images/coin.png");
     coins.x = app.screen.width - 150;
     coins.y = 2;
     coins.scale.x *= 0.08;
     coins.scale.y *= 0.08;
 
-    // draw left arrow for stake selector
+  /*   // draw left arrow for stake selector
     let leftArrow = new PIXI.Sprite.fromImage("./images/leftArrow.png");
     leftArrow.x = 220; //40
     leftArrow.y = 296;
     leftArrow.scale.x *= 0.05;
     leftArrow.scale.y *= 0.05;
     leftArrow.interactive = true;
-    leftArrow.buttonMode = true;
+    leftArrow.buttonMode = true; */
 
-    // draw right Arrow button for stake selector
+  /*   // draw right Arrow button for stake selector
     let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
     rightArrow.x = 380; //255
     rightArrow.y = 296;
     rightArrow.scale.x *= 0.05;
     rightArrow.scale.y *= 0.05;
     rightArrow.interactive = true;
-    rightArrow.buttonMode = true;
+    rightArrow.buttonMode = true; */
+
+    const buttonsHolder = new PIXI.Container();
+    buttonsHolder.x = 0;
+    buttonsHolder.y = 286;
+    const makeImageButton = (image, audioMP3, audioOGG, x = 0, y = 0, scale) => {
+        const button = PIXI.Sprite.fromImage(image);
+        const sound = new Howl({
+            src: [audioMP3, audioOGG]
+        });
+        button.sound = sound;
+        button.interactive = true;
+        button.buttonMode = true;
+        button.on('pointerdown', event => sound.play());
+        buttonsHolder.addChild(button);
+        button.x = x;
+        button.y = y;
+        button.scale.set(scale);
+        return button;
+    };
+
+    const leftArrow = makeImageButton(
+        './assets/images/leftArrow.png',
+        './assets/sounds/mp3/multimedia_button_click_006.mp3',
+        './assets/sounds/ogg/multimedia_button_click_006.mp3',
+        220,
+        10,
+        0.05
+    );
+
+    const rightArrow = makeImageButton(
+        './assets/images/rightArrow.png',
+        './assets/sounds/mp3/multimedia_button_click_006.mp3',
+        './assets/sounds/ogg/multimedia_button_click_006.mp3',
+        380,
+        10,
+        0.05
+    );
+
+        //check for event on click on rightArrow button and call AddStake function
+        rightArrow.addListener("pointerdown", () => {
+            console.log(`right arrow clicked ${playerResources.stake}`);
+            playerResources.addStake();
+            // FIXME: Bug the text is not changing when the value of stake is changing, counting is not correct when switching buttons
+        });
+
+        //check for event on click on leftArrow button and call MinusStake function
+        leftArrow.addListener("pointerdown", () => {
+            console.log(`left arrow clicked ${playerResources.stake}`);
+            playerResources.minusStake();
+            footerContainer.addChild(stackText);
+        });
 
     //Build the reels
     reelContainer = new PIXI.Container();
@@ -197,7 +248,7 @@ function onAssetsLoaded() {
     top.addChild(headerText);
 
     //Spin button
-    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./images/spin.png"));
+    let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./assets/images/spin.png"));
     buttonActive.x = 450;
     buttonActive.y = 235;
     buttonActive.scale.x *= 0.2;
@@ -206,7 +257,7 @@ function onAssetsLoaded() {
     buttonActive.interactive = true;
     buttonActive.buttonMode = true;
     //check for event on spin button
-    buttonActive.addListener("pointerdown", () => {
+    buttonActive.addListener('pointerdown', () => {
         startPlay();
         console.log(`button clicked`);
     });
@@ -229,20 +280,6 @@ function onAssetsLoaded() {
     balanceText.y = 7;
     top.addChild(balanceText);
 
-    //check for event on click on rightArrow button and call AddStake function
-    rightArrow.addListener("pointerdown", () => {
-        console.log(`right arrow clicked ${playerResources.stake}`);
-        playerResources.addStake();
-        // FIXME: Bug the text is not changing when the value of stake is changing, counting is not correct when switching buttons
-    });
-
-    //check for event on click on leftArrow button and call MinusStake function
-    leftArrow.addListener("pointerdown", () => {
-        console.log(`left arrow clicked ${playerResources.stake}`);
-        playerResources.minusStake();
-        footerContainer.addChild(stackText);
-    });
-
     app.stage.addChild(top);
     app.stage.addChild(coins);
     app.stage.addChild(footerContainer);
@@ -250,7 +287,7 @@ function onAssetsLoaded() {
         bottom,
         graphicsOne,
         graphicsTwo,
-        leftArrow, rightArrow,
+        buttonsHolder,
         buttonActive,
         stackText,
         winText);
@@ -358,3 +395,11 @@ function lerp(a1, a2, t) {
 //Backout function from tweenjs.
 //https://github.com/CreateJS/TweenJS/blob/master/src/tweenjs/Ease.js
 backout = amount => t => --t * t * ((amount + 1) * t + amount) + 1;
+
+/* 
+import scaleToWindow from 'scale-to-window-pixi';
+// in case you need ssr, it's good to wrap your window objects in some method
+
+window.addEventListener("resize", function (event) {
+    scaleToWindow(eleDict, getWindow, getDocument, backgroundColor);
+}); */

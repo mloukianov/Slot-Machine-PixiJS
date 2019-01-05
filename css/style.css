@@ -1,12 +1,4 @@
-html {
-    box-sizing: border-box;
-}
 
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
 
 html,
 body {
@@ -16,11 +8,28 @@ body {
     padding: 0;
     background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/Y2S3rB2/big-spinning-diamond-background_vkx5ylxywx__F0000.png");
     background-color: #cccccc;
+    /* 
+    overflow: hidden;
+    /*  Disable scrollbars */
+    /* display: block; */
+    /* No floating content on sides */
+
+}
+canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px #D82257 dashed;
 }
 
-#game-canvas {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+h1 {
+    text-transform: uppercase;
+    font-size: 22px;
+    color: #D82257;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    margin-top: -240px;
 }

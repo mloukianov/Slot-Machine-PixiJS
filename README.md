@@ -13,9 +13,9 @@ Visual Studio Code, Chrome PIXI.JS extension
 ##Dependencies
 
 Because the project has a page on github it can be open for view straight away
-If you are opening from a local machine you need to create a local server ffrom command line for example:
+If you are opening from a local machine you need to install dependencies and start the server(browser-sync will automatically open the project in your default browser):
 npm init
-http-server
+npm start
 
 ## Resources
 
@@ -26,6 +26,9 @@ https://pixijs.io/examples/#/demos/slots-demo.js
 https://chrome.google.com/webstore/detail/pixijs-devtools/aamddddknhcagpehecnhphigffljadon
 
 https://pixijs.io/pixi-text-style/
+
+Free sounds: https://www.zapsplat.com/sound-effect-category/casino-and-games-arcade/page/2/
+Convert audio to OGG: https://audio.online-convert.com/ru/convert-to-ogg
 
 ## The Test 
 

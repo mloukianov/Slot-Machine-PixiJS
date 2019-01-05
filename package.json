@@ -1,0 +1,31 @@
+{
+  "name": "slot-tech-test-master",
+  "version": "1.0.0",
+  "description": "Test",
+  "main": "app.js",
+  "dependencies": {
+    "fconsole": "^0.0.32",
+    "pixi-game": "^0.1.11",
+    "scale-to-window-pixi": "^1.2.0",
+    "howler": "^2.1.1",
+    "pixi.js": "^4.8.4"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.3",
+    "pixi.js": "^4.8.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync -s -w -f '*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anastasiaseraciov/Slot-Machine-PixiJS.git"
+  },
+  "author": "Anastasia Seraciov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anastasiaseraciov/Slot-Machine-PixiJS/issues"
+  },
+  "homepage": "https://github.com/anastasiaseraciov/Slot-Machine-PixiJS#readme"
+}
