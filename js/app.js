@@ -119,6 +119,7 @@ function onAssetsLoaded() {
     rightArrow.interactive = true;
     rightArrow.buttonMode = true; */
 
+    //Create PIXI container to hold all app buttons
     const buttonsHolder = new PIXI.Container();
     buttonsHolder.x = 0;
     buttonsHolder.y = 0;
@@ -137,7 +138,7 @@ function onAssetsLoaded() {
         button.scale.set(scale);
         return button;
     };
-
+    //Add image sprite, sound, location and scale leftArrow button
     const leftArrow = makeImageButton(
         './assets/images/leftArrow.png',
         './assets/sounds/mp3/multimedia_button_click_006.mp3',
@@ -146,7 +147,7 @@ function onAssetsLoaded() {
         296,
         0.05
     );
-
+    //Add image sprite, sound, location and scale rightArrow button
     const rightArrow = makeImageButton(
         './assets/images/rightArrow.png',
         './assets/sounds/mp3/multimedia_button_click_006.mp3',
@@ -155,7 +156,7 @@ function onAssetsLoaded() {
         296,
         0.05
     );
-
+    //Add image sprite, sound, location and scale the spinButton button
     const buttonActive = makeImageButton(
         './assets/images/spin.png',
         './assets/sounds/mp3/zapsplat_foley_money_pouch_fabric_coins_down_on_surface_006_15052.mp3',
@@ -308,6 +309,7 @@ function onAssetsLoaded() {
         if (running) return;
         running = true;
 
+        // Add sound when reels running is set to true
         if (running){
             const sound = new Howl({
                 src: ['./assets/sounds/mp3/arcade-game-fruit-machine-jackpot-002-long.mp3', './assets/sounds/mp3/arcade-game-fruit-machine-jackpot-002-long.mp3']
