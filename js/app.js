@@ -3,7 +3,6 @@
     - add button choose stake and show current stake - > name stake
     - add showcase Total money  - > name balance
     - add showcase total win - > name win
-    - add coin image
     - add border to text/restyle
     - Methods:
     - Calculate total and left balance
@@ -11,14 +10,13 @@
      - Win Logic
      - Stake logic
      - Add tweens pixi, tweens
-     - Add sound pixi.sound
 */
 
 const app = new PIXI.Application(640, 360, {
     transparent: true,
     autoResize: true,
     antialias: true,
-    resolution: 1
+    resolution: 1,
 });
 
 document.body.appendChild(app.view);
@@ -309,6 +307,13 @@ function onAssetsLoaded() {
     function startPlay() {
         if (running) return;
         running = true;
+
+        if (running){
+            const sound = new Howl({
+                src: ['./assets/sounds/mp3/arcade-game-fruit-machine-jackpot-002-long.mp3', './assets/sounds/mp3/arcade-game-fruit-machine-jackpot-002-long.mp3']
+            });
+            sound.play();
+        };
 
         for (let i = 0; i < reels.length; i++) {
             const r = reels[i];
