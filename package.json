@@ -5,10 +5,10 @@
   "main": "app.js",
   "dependencies": {
     "fconsole": "^0.0.32",
-    "pixi-game": "^0.1.11",
-    "scale-to-window-pixi": "^1.2.0",
     "howler": "^2.1.1",
-    "pixi.js": "^4.8.4"
+    "pixi-game": "^0.1.11",
+    "pixi.js": "^4.8.4",
+    "scale-to-window-pixi": "^1.2.0"
   },
   "devDependencies": {
     "browser-sync": "^2.26.3",
