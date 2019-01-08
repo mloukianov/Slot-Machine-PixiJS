@@ -40,6 +40,10 @@ class Resources {
                 playerResources.stake --;
             }
         };
+        this.reduceBalance = function (){
+            //Reduce Balance when player prss on spin button
+            this.balance = this.balance - this.stake;
+        }
     }
 }
 let playerResources = new Resources();
@@ -104,24 +108,6 @@ function onAssetsLoaded() {
     coins.scale.x *= 0.08;
     coins.scale.y *= 0.08;
 
-  /*   // draw left arrow for stake selector
-    let leftArrow = new PIXI.Sprite.fromImage("./images/leftArrow.png");
-    leftArrow.x = 220; //40
-    leftArrow.y = 296;
-    leftArrow.scale.x *= 0.05;
-    leftArrow.scale.y *= 0.05;
-    leftArrow.interactive = true;
-    leftArrow.buttonMode = true; */
-
-  /*   // draw right Arrow button for stake selector
-    let rightArrow = new PIXI.Sprite.fromImage("./images/rightArrow.png");
-    rightArrow.x = 380; //255
-    rightArrow.y = 296;
-    rightArrow.scale.x *= 0.05;
-    rightArrow.scale.y *= 0.05;
-    rightArrow.interactive = true;
-    rightArrow.buttonMode = true; */
-
     //Create PIXI container to hold all app buttons
     const buttonsHolder = new PIXI.Container();
     buttonsHolder.x = 0;
@@ -184,18 +170,13 @@ function onAssetsLoaded() {
             stackText.text = playerResources.stake;
         });
 
-        /* //Spin button
-        let buttonActive = new PIXI.Sprite(PIXI.Texture.fromImage("./assets/images/spin.png"));
-        buttonActive.x = 450;
-        buttonActive.y = 235;
-        buttonActive.scale.x *= 0.2;
-        buttonActive.scale.y *= 0.2;
-        //Set the interactivity.
-        buttonActive.interactive = true;
-        buttonActive.buttonMode = true; */
         //check for event on spin button
         buttonActive.addListener('pointerdown', () => {
             startPlay();
+            //Reduce balance on click depending on bet amount
+            playerResources.reduceBalance();
+            //Add changes on canvas environment
+            balanceText.text = playerResources.balance;
             console.log(`button clicked`);
         });
 
